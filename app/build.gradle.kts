@@ -75,6 +75,9 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.play.services.auth)
     implementation(libs.firebase.auth)
+    implementation(libs.firebase.firestore.ktx)
+    implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.runtime.livedata)
     testImplementation(libs.junit)
     implementation(libs.androidx.navigation.compose)
     androidTestImplementation(libs.androidx.junit)
@@ -94,6 +97,9 @@ dependencies {
     implementation ("androidx.credentials:credentials-play-services-auth:1.2.2")
     implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
     implementation("com.google.firebase:firebase-analytics")
+
+//    implementation ("androidx.compose.material3:material3:<latest-version>")
+//    implementation ("androidx.compose.material3:material3-icons-extended:<latest-version>")
 
     //animation
     implementation ("androidx.navigation:navigation-compose:2.5.0")

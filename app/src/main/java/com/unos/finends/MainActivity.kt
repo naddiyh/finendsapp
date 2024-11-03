@@ -4,11 +4,11 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.runtime.Composable
-import androidx.navigation.compose.rememberNavController
-import com.unos.finends.screen.SplashScreen
-import com.unos.finends.ui.theme.BottomNavbar
-import com.unos.finends.ui.theme.SignUp
+import com.unos.finends.features.auth.Login
+import com.unos.finends.features.auth.SignUpScreen
+import com.unos.finends.features.home.HomeScreen
+import com.unos.finends.features.profile.ProfileScreen
+import com.unos.finends.features.statistic.StatisticScreen
 
 
 class MainActivity : ComponentActivity() {
@@ -17,7 +17,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-
             LoginActivity()
         }
     }

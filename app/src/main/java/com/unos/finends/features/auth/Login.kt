@@ -1,9 +1,8 @@
-package com.unos.finends.ui.theme
+package com.unos.finends.features.auth
 
 
-import androidx.compose.foundation.BorderStroke
+import android.util.Log
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,7 +16,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -28,24 +26,25 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.unos.finends.R
-import com.unos.finends.Screen
-import com.unos.finends.SocialMedia
+import com.unos.finends.data.model.LoginViewModel
+import com.unos.finends.data.model.SignInViewModel
+import com.unos.finends.ui.theme.YelGreen
+import kotlin.math.log
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -54,8 +53,13 @@ fun Login(
 
     modifier: Modifier = Modifier,
     onSignInClick: () -> Unit,
-    onNavigateToSignUp: () -> Unit
+    onNavigateToSignUp: () -> Unit,
+    loginViewModel: LoginViewModel = viewModel()
 ){
+    val loginData = loginViewModel.loginData
+    val isLoading = loginViewModel.isLoading
+
+
     Row(
         modifier = Modifier
             .fillMaxSize()
@@ -78,7 +82,6 @@ fun Login(
         Spacer(modifier = Modifier.height(30.dp))
         Image(painter = painterResource(id = R.drawable.login) , contentDescription = "Login Image",
             modifier = Modifier.size(150.dp))
-
         Spacer(modifier = Modifier.height(50.dp))
 //
 //        Row(modifier = Modifier.fillMaxWidth(),
@@ -86,9 +89,17 @@ fun Login(
 //            Text(text = "Welcome Back,", fontSize = 16.sp, fontWeight = FontWeight.Light)
 //        }
 //        Spacer(modifier= Modifier.height(10.dp))
+        LoginSection(loginViewModel = loginViewModel)
 
-
-        LoginSection()
+        Button(onClick = { loginViewModel.login() },
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(12.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = YelGreen,
+            )
+        ){
+            Text(text = if (isLoading) "Loading..." else "Login")
+        }
 
         Spacer(modifier= Modifier.height(35.dp))
         Column (
@@ -139,7 +150,6 @@ fun Login(
                         fontWeight = FontWeight.Normal
                     )
                 )
-
                 Text(
                     text = "Sign in",
                     style = TextStyle(
@@ -151,15 +161,16 @@ fun Login(
                         onNavigateToSignUp()
                     }
                 )
+
             }
         }
     }}
 
 @Composable
-private fun LoginSection() {
+private fun LoginSection(loginViewModel: LoginViewModel) {
     OutlinedTextField(
-        value = "",
-        onValueChange = {},
+        value = loginViewModel.loginData.email,
+        onValueChange = { loginViewModel.onEmailChanged(it) },
         label = { Text(text = "Email", fontSize = 14.sp, color = Color.LightGray) },
         modifier = Modifier
             .fillMaxWidth()
@@ -183,8 +194,8 @@ private fun LoginSection() {
 
     Spacer(modifier = Modifier.height(10.dp))
     OutlinedTextField(
-        value = "",
-        onValueChange = {},
+        value = loginViewModel.loginData.password,
+        onValueChange = {loginViewModel.onPasswordChanged(it)},
         label = { Text(text = "Password", fontSize = 14.sp, color = Color.LightGray) },
         modifier = Modifier
             .fillMaxWidth()
@@ -219,19 +230,8 @@ private fun LoginSection() {
     ) {
         Text(text = "Forget password?", color = Color.LightGray, fontSize = 12.sp,  style = TextStyle(textDecoration = TextDecoration.Underline) )
     }
-
     Spacer (modifier = Modifier.height(25.dp))
-    Button(onClick = {  },
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(12.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = YelGreen,
-        )
-    )
-    {
-        Text(text = "Login")
 
-    }
 }
 
 

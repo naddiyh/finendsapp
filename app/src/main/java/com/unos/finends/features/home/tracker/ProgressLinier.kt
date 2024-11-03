@@ -11,6 +11,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.unos.finends.ui.theme.SoftGray
+import com.unos.finends.ui.theme.YelGreen
 
 @Composable
 fun ProgressBarWithLabel(progress: Float) {
@@ -21,8 +23,8 @@ fun ProgressBarWithLabel(progress: Float) {
     ) {
         Box(
             modifier = Modifier
-                .weight(0.2f)
-                .height(6.dp)
+                .weight(0.1f)
+                .height(4.dp)
                 .clip(RoundedCornerShape(50))
                 .background(Color.LightGray)
         ) {
@@ -33,7 +35,7 @@ fun ProgressBarWithLabel(progress: Float) {
                 modifier = Modifier
                     .fillMaxHeight()
                     .clip(RoundedCornerShape(50)),
-                color = Color(0xFF4B6156),
+                color = YelGreen,
                 trackColor = Color.LightGray,
             )
         }
@@ -42,9 +44,9 @@ fun ProgressBarWithLabel(progress: Float) {
 
         Text(
             text = "${(progress * 100).toInt()}%",
-            fontSize = 16.sp,
+            fontSize = 14.sp,
             fontWeight = FontWeight.Bold,
-            color = Color.Black
+            color = SoftGray
         )
     }
 }

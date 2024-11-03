@@ -1,4 +1,4 @@
-package com.unos.finends.ui.theme
+package com.unos.finends.core.navigation
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.padding
@@ -14,28 +14,26 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
-import com.google.firebase.auth.FirebaseUser
 import com.unos.finends.auth
-import com.unos.finends.data.model.NavigationItems
-import com.unos.finends.screen.HistoryScreen
-import com.unos.finends.screen.StatisticScreen
+import com.unos.finends.features.history.HistoryScreen
+import com.unos.finends.features.profile.ProfileScreen
+import com.unos.finends.features.statistic.StatisticScreen
+import com.unos.finends.features.home.HomeScreen
 
 @Composable
-fun BottomNavbar(navController: NavHostController) {
-
+fun BottomNavigation(navController: NavHostController) {
     val navigationItems = listOf(
         NavigationItems.Home,
         NavigationItems.History,
         NavigationItems.Statistic,
         NavigationItems.Profile
     )
-
     Scaffold(
         bottomBar = {
             NavigationBar {
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentDestination = navBackStackEntry?.destination?.route
+
                 navigationItems.forEach { navItem ->
                     NavigationBarItem(
                         icon = {
@@ -46,23 +44,15 @@ fun BottomNavbar(navController: NavHostController) {
                         },
                         selected = currentDestination == navItem.route,
                         onClick = {
-                            navController.navigate(navItem.route){
-                                popUpTo(navController.graph.findStartDestination().id){
-                                    saveState = true
+                            if (currentDestination != navItem.route) {
+                                navController.navigate(navItem.route) {
+                                    popUpTo(navController.graph.findStartDestination().id) {
+                                        saveState = true
+                                    }
+                                    launchSingleTop = true
+                                    restoreState = true
                                 }
-                                launchSingleTop = true
-                                restoreState = true
                             }
-
-//                            if (currentDestination != navItem.route) {
-//                                navController.navigate(navItem.route) {
-//                                    popUpTo(navController.graph.startDestinationId) {
-//                                        saveState = true
-//                                    }
-//                                    launchSingleTop = true
-//                                    restoreState = true
-//                                }
-//                            }
                         }
                     )
                 }
@@ -75,17 +65,21 @@ fun BottomNavbar(navController: NavHostController) {
             modifier = Modifier.padding(paddingValues)
         ) {
             composable(NavigationItems.Home.route) {
-                HomeScreen(currentUser = auth.currentUser) {
-                    navController.navigate(NavigationItems.Profile.route)
-                }
+                HomeScreen(
+                    navController = navController,
+                    currentUser = auth.currentUser,
+                    onSignOutClick = { }
+                )
             }
             composable(NavigationItems.Statistic.route) {
-                StatisticScreen()
+                StatisticScreen( navController = navController)
             }
             composable(NavigationItems.History.route) {
-                HistoryScreen()
+                HistoryScreen(navController = navController)
+            }
+            composable(NavigationItems.Profile.route) {
+               ProfileScreen(navController = navController, currentUser = auth.currentUser )
             }
         }
     }
-
 }
