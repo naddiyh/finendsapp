@@ -13,6 +13,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.unos.finends.ui.theme.YelGreen
 
 @Composable
 fun SplashScreen() {
@@ -22,10 +23,10 @@ fun SplashScreen() {
             .background(
                 Brush.verticalGradient(
                     colors = listOf(
-                        Color(0xFFDDE255), // GREEN
-                        Color(0xFFDDE255), // GREEN
-                        Color(0xFFDDE255), // GREEN
-                        Color(0xFFFFFFFF)  // Light yellow
+                        YelGreen,
+                        YelGreen,
+                        YelGreen,
+                        Color(0xFFFFFFFF)
                     )
                 )
             ),
